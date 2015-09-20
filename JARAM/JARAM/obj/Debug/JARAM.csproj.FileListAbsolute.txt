@@ -1,0 +1,11 @@
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\JARAM.exe.config
+G:\GitHub\EloBuddy\JARAM\JARAM\obj\Debug\JARAM.csprojResolveAssemblyReference.cache
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\JARAM.exe
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\JARAM.pdb
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\EloBuddy.dll
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\EloBuddy.SDK.dll
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\SharpDX.dll
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\SharpDX.Direct3D9.dll
+G:\GitHub\EloBuddy\JARAM\JARAM\bin\Debug\Newtonsoft.Json.dll
+G:\GitHub\EloBuddy\JARAM\JARAM\obj\Debug\JARAM.exe
+G:\GitHub\EloBuddy\JARAM\JARAM\obj\Debug\JARAM.pdb
