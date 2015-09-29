@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD637044-2776-4A75-A0A1-26CDF5B0A01B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{511C2612-2752-46BA-B69D-4515EB5B3D9D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JARAM</RootNamespace>
-    <AssemblyName>JARAM</AssemblyName>
+    <RootNamespace>IPBuddy</RootNamespace>
+    <AssemblyName>IPBuddy</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,15 +31,28 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>H:\LeagueSharp\EloBuddy\System\EloBuddy.dll</HintPath>
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\EloBuddy.dll</HintPath>
+    </Reference>
+    <Reference Include="EloBuddy.Sandbox">
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>H:\LeagueSharp\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\EloBuddy.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>H:\LeagueSharp\EloBuddy\System\SharpDX.dll</HintPath>
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>H:\LeagueSharp\EloBuddy\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
