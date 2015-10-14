@@ -1,0 +1,12 @@
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\JKarma.exe.config
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\obj\Debug\JKarma.csprojResolveAssemblyReference.cache
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\JKarma.exe
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\JKarma.pdb
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\EloBuddy.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\EloBuddy.Sandbox.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\EloBuddy.SDK.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\Newtonsoft.Json.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\SharpDX.Direct3D9.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\bin\Debug\SharpDX.dll
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\obj\Debug\JKarma.exe
+G:\GitHub\EloBuddy\JKarma\JKarma\JKarma\obj\Debug\JKarma.pdb
