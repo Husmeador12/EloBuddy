@@ -44,11 +44,11 @@ namespace JKarma
             Chat.Print(AddonName + " made by " + Author + " loaded! ^.^");
             Q = new Spell.Skillshot(SpellSlot.Q, 880, SkillShotType.Linear, 250, 1500, 100);
             Q.AllowedCollisionCount = 0;
-            W = new Spell.Skillshot(SpellSlot.W, 600, SkillShotType.Linear, 0, 1400, 300);
+            W = new Spell.Skillshot(SpellSlot.W, 600, SkillShotType.Linear, 250, 1400, 300);
             W.AllowedCollisionCount = int.MaxValue;
             E = new Spell.Skillshot(SpellSlot.E, 800, SkillShotType.Circular, 250, 1550, 60);
             E.AllowedCollisionCount = 0;
-            R = new Spell.Skillshot(SpellSlot.R, 800, SkillShotType.Circular, 0, 1400, 300);
+            R = new Spell.Skillshot(SpellSlot.R, 800, SkillShotType.Circular, 0, 0, 300);
             R.AllowedCollisionCount = int.MaxValue;
             var slot = myHero.GetSpellSlotFromName("summonerdot");
             if (slot != SpellSlot.Unknown)
@@ -109,6 +109,7 @@ namespace JKarma
             Obj_AI_Base.OnBuffLose += OnRemoveBuff;
             Gapcloser.OnGapcloser += OnGapCloser;
             Interrupter.OnInterruptableSpell += OnInterruptableSpell;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Turret_OnBasicAttack;
         }
 
         public static bool IsWall(Vector3 v)
@@ -141,7 +142,7 @@ namespace JKarma
                 Q.SourcePosition = myHero.Position;
             }
             CatchQ();
-            KillSteal();
+            //KillSteal();
             if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
             {
                 Combo();
@@ -164,29 +165,30 @@ namespace JKarma
             }
         }
 
-        static void KillSteal()
-        {
-            foreach (AIHeroClient enemy in EntityManager.Heroes.Enemies)
-            {
-                if (enemy.IsValidTarget(E.Range) && enemy.HealthPercent <= 40)
-                {
-                    var damageI = GetBestCombo(enemy);
-                    if (damageI.Damage >= enemy.Health)
-                    {
-                        if (SubMenu["KillSteal"]["Q"].Cast<CheckBox>().CurrentValue && (Damage(enemy, Q.Slot) >= enemy.Health || damageI.Q)) { CastQ(enemy); }
-                        if (SubMenu["KillSteal"]["W"].Cast<CheckBox>().CurrentValue && (Damage(enemy, W.Slot) >= enemy.Health || damageI.W)) { CastW(enemy); }
-                        if (SubMenu["KillSteal"]["E"].Cast<CheckBox>().CurrentValue && (Damage(enemy, E.Slot) >= enemy.Health || damageI.E)) { CastE(enemy); }
-                    }
-                    if (Ignite != null && SubMenu["KillSteal"]["Ignite"].Cast<CheckBox>().CurrentValue && Ignite.IsReady() && myHero.GetSummonerSpellDamage(enemy, DamageLibrary.SummonerSpells.Ignite) >= enemy.Health)
-                    {
-                        Ignite.Cast(enemy);
-                    }
-                }
-            }
-        }
+        //static void KillSteal()
+        //{
+            //foreach (AIHeroClient enemy in EntityManager.Heroes.Enemies)
+            //{
+                //if (enemy.IsValidTarget(E.Range) && enemy.HealthPercent <= 40)
+                //{
+                    //var damageI = GetBestCombo(enemy);
+                    //if (damageI.Damage >= enemy.Health)
+                    //{
+                    //    if (SubMenu["KillSteal"]["Q"].Cast<CheckBox>().CurrentValue && (Damage(enemy, Q.Slot) >= enemy.Health || damageI.Q)) { CastQ(enemy); }
+                    //    if (SubMenu["KillSteal"]["W"].Cast<CheckBox>().CurrentValue && (Damage(enemy, W.Slot) >= enemy.Health || damageI.W)) { CastW(enemy); }
+                        //if (SubMenu["KillSteal"]["E"].Cast<CheckBox>().CurrentValue) { CastE(enemy); }
+                    //}
+                    //if (Ignite != null && SubMenu["KillSteal"]["Ignite"].Cast<CheckBox>().CurrentValue && Ignite.IsReady() && myHero.GetSummonerSpellDamage(enemy, DamageLibrary.SummonerSpells.Ignite) >= enemy.Health)
+                   // {
+                        //Ignite.Cast(enemy);
+                   // }
+                //}
+           // }
+        //}
         static void Combo()
         {
-            var target = TargetSelector.GetTarget(E.Range, EloBuddy.DamageType.Magical);
+            var target = TargetSelector.GetTarget(Q.Range, DamageType.Magical);
+            //var target = TargetSelector.GetTarget(2000, EloBuddy.DamageType.Magical);
             if (target.IsValidTarget())
                 
             {
@@ -197,7 +199,8 @@ namespace JKarma
                 //    return;
                 //}
                 if (SubMenu["Combo"]["Q"].Cast<CheckBox>().CurrentValue) { CastQ(target); }
-                if (SubMenu["Combo"]["W"].Cast<CheckBox>().CurrentValue) { CastW(target); }
+                //if (SubMenu["Combo"]["W"].Cast<CheckBox>().CurrentValue) { CastW(target); }
+                // W.Cast(target); 
             }
         }
 
@@ -212,29 +215,11 @@ namespace JKarma
                 //    return;
                 //}
                 if (SubMenu["Harass"]["Q"].Cast<CheckBox>().CurrentValue) { CastQ(target); }
-                if (SubMenu["Harass"]["E"].Cast<CheckBox>().CurrentValue) { CastE(myHero); }
+                if (SubMenu["Harass"]["E"].Cast<CheckBox>().CurrentValue) { CastE(target); }
             }
         }
 
-        #region Auto E
-        public static void AutoE()
-        {
-            var TakingAllies = EntityManager.Heroes.Allies.Where(
-                hero => !hero.IsMe && !hero.IsDead && !hero.IsInShopRange()
-                        && !hero.IsZombie &&
-                        hero.Distance(myHero) <= 800 
-                        //&&
-                       // MenuClass.Healing["w" + hero.ChampionName].Cast<CheckBox>().CurrentValue &&
-                        //hero.HealthPercent <= MenuClass.Healing["wpct" + hero.ChampionName].Cast<Slider>().CurrentValue
-                ).ToList();
-            var AllyToProtect = TakingAllies.OrderBy(x => x.Health).FirstOrDefault(x => !x.IsInShopRange());
-            if (AllyToProtect != null && SubMenu["Misc"]["AutoProtect"].Cast<CheckBox>().CurrentValue)
-            {
-                Program.E.Cast(AllyToProtect);
-            }
-
-        }
-        #endregion
+        
         static void Flee()
         {
             if (SubMenu["Flee"]["R"].Cast<CheckBox>().CurrentValue && R.IsReady())
@@ -271,7 +256,7 @@ namespace JKarma
                             return;
                         }
                         if (SubMenu["JungleClear"]["Q"].Cast<CheckBox>().CurrentValue) { CastQ(minion); }
-                        if (SubMenu["JungleClear"]["E"].Cast<CheckBox>().CurrentValue) { CastE(myHero); }
+                        //if (SubMenu["JungleClear"]["E"].Cast<CheckBox>().CurrentValue) { CastE(myHero); }
                     }
                 }
 
@@ -299,24 +284,37 @@ namespace JKarma
         {
             if (W.IsReady() && target.IsValidTarget())
             {
-                var r = W.GetPrediction(target);
-                if (r.HitChance >= HitChance.High)
-                {
+
                     if (target.Type == myHero.Type)
                     {
-                        myHero.Spellbook.CastSpell(W.Slot);
+                        if (_Q["Object"] != null || Orbwalker.LastTarget.NetworkId == target.NetworkId)
+                        {
+                            W.Cast(target);
+                            //myHero.Spellbook.CastSpell(W.Slot);
+                        }
                     }
-                }
+                    else
+                    {
+                        W.Cast(target);
+                       // myHero.Spellbook.CastSpell(W.Slot);
+                    }
+
             }
         }
+
+        #region Auto E
+        static void AutoE()
+        {
+
+        }
+        #endregion
         static void CastE(Obj_AI_Base target)
         {
             if (E.IsReady() && target.IsValidTarget())
             {
-                var r = E.GetPrediction(target);
-                if (r.HitChance >= HitChance.High)
+                if (target.Type == myHero.Type)
                 {
-                    E.Cast(r.CastPosition);
+                    myHero.Spellbook.CastSpell(E.Slot);
                 }
             }
         }
@@ -440,6 +438,15 @@ namespace JKarma
             }
         }
 
+        static void Obj_AI_Turret_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender is Obj_AI_Turret && args.Target.IsMe)
+            {
+
+                Chat.Print("A Turret is ATTACKING me!");
+            }
+        }
+
         static void OnGapCloser(Obj_AI_Base sender, Gapcloser.GapcloserEventArgs args)
         {
             if (SubMenu["Misc"]["Gapclose"].Cast<CheckBox>().CurrentValue)
@@ -486,6 +493,7 @@ namespace JKarma
                     _R["EndTime"] = (float)(Game.Time + buff.EndTime - buff.StartTime);
                 }
             }
+         
         }
 
         static void OnRemoveBuff(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
